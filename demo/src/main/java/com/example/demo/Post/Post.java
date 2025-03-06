@@ -9,11 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "post")
-@NoArgsConstructor
 public class Post {
 
     @Id
@@ -32,6 +31,11 @@ public class Post {
     @ManyToOne
     @NotNull(message = "User is mandatory")
     private User user;
+
+    public Post() {
+
+    }
+
 
     public Post(String title, String content, String author, User user) {
         this.title = title;

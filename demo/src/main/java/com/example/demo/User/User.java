@@ -1,6 +1,10 @@
 package com.example.demo.User;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.Post.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,12 +17,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
-import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
-public class User {
+
+public class User implements UserDetails{
 
     @Id
     @NotNull(message = "Email is mandatory")
@@ -41,6 +45,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // ✅ Corrected OneToMany mapping
     @JsonIgnore
     private List<Post> posts; // ✅ Changed to List<Post> for multiple posts
+
+    public User() {
+
+    }
 
     public User(String email, String username, String password, String role) {
         this.email = email;
@@ -95,5 +103,34 @@ public class User {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return List.of();
+
+        }
+
+    @Override
+    public boolean isAccountNonExpired() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
